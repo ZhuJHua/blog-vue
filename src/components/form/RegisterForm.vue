@@ -3,12 +3,12 @@ import { storeToRefs } from 'pinia'
 import { useRegisterStore } from '@/stores/User'
 import { Password, User } from '@vicons/carbon'
 import { PasswordFilled } from '@vicons/material'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 
+defineEmits(['changeForm'])
 const formRef = ref<FormInst | null>(null)
 const { registerParam } = storeToRefs(useRegisterStore())
-defineEmits(['changeForm'])
 
 function validatePasswordStartWith(rule: FormItemRule, value: string): boolean {
   return (
@@ -22,7 +22,7 @@ function validatePasswordSame(rule: FormItemRule, value: string): boolean {
   return value === registerParam.value.password
 }
 
-const formRule: FormRules = {
+const formRule: FormRules = reactive({
   username: [
     {
       required: true,
@@ -54,7 +54,7 @@ const formRule: FormRules = {
       trigger: ['blur', 'password-input']
     }
   ]
-}
+})
 </script>
 
 <template>
@@ -63,7 +63,7 @@ const formRule: FormRules = {
       <h2>注册</h2>
     </n-divider>
     <n-form-item label="用户名" path="username">
-      <n-input v-model="registerParam.username" placeholder="请输入用户名" clearable>
+      <n-input v-model:value="registerParam.username" placeholder="请输入用户名" clearable>
         <template #prefix>
           <n-icon :component="User" />
         </template>
@@ -71,7 +71,7 @@ const formRule: FormRules = {
     </n-form-item>
     <n-form-item label="密码" path="password">
       <n-input
-        v-model="registerParam.password"
+        v-model:value="registerParam.password"
         placeholder="请输入密码"
         type="password"
         show-password-on="mousedown"
@@ -83,7 +83,7 @@ const formRule: FormRules = {
     </n-form-item>
     <n-form-item label="确认密码" path="checkPassword">
       <n-input
-        v-model="registerParam.checkPassword"
+        v-model:value="registerParam.checkPassword"
         placeholder="请再次输入密码"
         type="password"
         show-password-on="mousedown"

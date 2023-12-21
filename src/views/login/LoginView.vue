@@ -41,7 +41,10 @@ const changeForm = () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/css/color';
+@import '@/assets/css/shadow';
+
 .container {
   width: 100vw;
   height: 100vh;
@@ -56,9 +59,9 @@ const changeForm = () => {
   width: 50%;
   height: 50%;
   border-radius: 20px;
-  background-color: white;
-  border: 1px #d4d7de solid;
-  box-shadow: 5px 5px 10px -4px #909399;
+  background-color: $basic-white;
+  border: 1px $base-border solid;
+  box-shadow: $right-bottom-shadow $darker-border;
 }
 
 .form-right {
@@ -83,10 +86,14 @@ const changeForm = () => {
 媒体查询区域
  */
 @media (max-width: 640px) {
-  .container .form-container {
-    width: 100%;
-    border-radius: unset;
-    box-shadow: 0 5px 10px -5px #cdd0d6;
+  .container {
+    .form-container {
+      width: 100%;
+      border-radius: unset;
+      box-shadow:
+        $top-shadow $darker-border,
+        $bottom-shadow $darker-border;
+    }
   }
 }
 
