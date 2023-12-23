@@ -1,13 +1,12 @@
 import { createAlova, useRequest } from 'alova'
 import VueHook from 'alova/vue'
 import GlobalFetch from 'alova/GlobalFetch'
-import type { Result } from '@/type/Type'
+import type { Hitokoto, Result } from '@/type/type'
 import router from '@/router' //alova实例
 
 //alova实例
 export const alovaInstance = createAlova({
   //请求根路径
-  baseURL: 'http://localhost',
   statesHook: VueHook,
   requestAdapter: GlobalFetch(),
   //响应拦截器
@@ -34,11 +33,14 @@ export const alovaInstance = createAlova({
 })
 //初始化请求
 
-export const creatGetter = alovaInstance.Get<Result>('/api/test', {
-  headers: {
-    'Content-Type': 'application/json;charset=UTF-8'
-  }
-})
-export const { data: getData } = useRequest(creatGetter, {
+export const creatGetter = <T>(url: string) => {
+  return alovaInstance.Get<T>(url, {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export const { data: getHitokoto } = useRequest(creatGetter<Hitokoto>('https://v1.hitokoto.cn'), {
   initialData: {}
 })

@@ -3,3 +3,6 @@ export type Result = {
   msg: string
   data: object | object[] | undefined
 }
+export type Hitokoto = {
+  hitokoto: string
+}
