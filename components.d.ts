@@ -7,11 +7,13 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ArticleCard: typeof import('./src/components/card/ArticleCard.vue')['default']
     LoginForm: typeof import('./src/components/form/LoginForm.vue')['default']
     LoginIcon: typeof import('./src/components/icons/LoginIcon.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NButtonGroup: typeof import('naive-ui')['NButtonGroup']
     NCard: typeof import('naive-ui')['NCard']
+    NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDataTable: typeof import('naive-ui')['NDataTable']
     NDivider: typeof import('naive-ui')['NDivider']
     NForm: typeof import('naive-ui')['NForm']
@@ -28,8 +30,10 @@ declare module 'vue' {
     NLayoutHeader: typeof import('naive-ui')['NLayoutHeader']
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']
     NMenu: typeof import('naive-ui')['NMenu']
+    NPopover: typeof import('naive-ui')['NPopover']
     NResult: typeof import('naive-ui')['NResult']
     NSpace: typeof import('naive-ui')['NSpace']
+    NTooltip: typeof import('naive-ui')['NTooltip']
     RegisterForm: typeof import('./src/components/form/RegisterForm.vue')['default']
     RegisterIcon: typeof import('./src/components/icons/RegisterIcon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
