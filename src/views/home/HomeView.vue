@@ -1,82 +1,94 @@
 <script setup lang="ts">
-import { CopyrightRegular } from '@vicons/fa'
+import { type Ref } from 'vue'
+import { getHitokoto } from '@/api/alova'
+import type { ArticleInfo, Hitokoto } from '@/type/type'
+import TitleCard from '@/components/card/TitleCard.vue'
+import ArticleCard from '@/components/card/ArticleCard.vue'
+
+const hitokotoData: Ref<Hitokoto> = getHitokoto
+const action: ArticleInfo = {
+  author: 'Cheese',
+  time: 86400000,
+  view: 100
+}
 </script>
 
 <template>
-  <div class="container">
-    <n-layout position="absolute">
-      <n-layout-header class="header" position="absolute" bordered>header</n-layout-header>
-      <n-layout position="absolute" :native-scrollbar="false" class="main-container">
-        <n-layout-content content-style="padding: 20px;" class="main-body"> </n-layout-content>
-      </n-layout>
-      <n-layout-footer class="footer" position="absolute" bordered>
-        <n-button text>
-          <template #icon>
-            <n-icon size="14px">
-              <CopyrightRegular />
-            </n-icon>
-          </template>
-        </n-button>
-      </n-layout-footer>
-    </n-layout>
+  <div class="title-container">
+    <TitleCard
+      title="这里一片荒芜"
+      content="勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，
+    奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意
+    不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？"
+      :extra="hitokotoData.hitokoto"
+    />
+  </div>
+  <div class="card-container">
+    <ArticleCard
+      title="滕王阁序"
+      extra="诗词"
+      content="勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，
+    奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意
+    不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？"
+      :action="action"
+    />
+    <ArticleCard
+      title="头发"
+      extra="挑染"
+      content="勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，
+    奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意
+    不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？"
+      :action="action"
+      class="m-card"
+    />
+    <ArticleCard title="头发" extra="挑染" content="身体" :action="action" class="l-card" />
   </div>
 </template>
 
 <style scoped lang="scss">
 @import '@/assets/css/color';
 @import '@/assets/css/shadow';
+@import '@/assets/css/variable';
 
-$header-height: 50px;
-$footer-height: 20px;
-$max-width: 1200px;
-
-.common-layout {
-  width: 100vw;
-  height: 100vh;
-  background-repeat: repeat;
-  background-image: url('@/assets/img/leaves-pattern.webp');
-}
-
-.container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  margin: 0 auto;
-  box-sizing: border-box;
-  background-color: $basic-white;
-  box-shadow:
-    $left-shadow $darker-border,
-    $right-shadow $darker-border;
-}
-
-.header {
-  height: $header-height;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.main-container {
-  top: $header-height;
-  bottom: $footer-height;
-}
-
-.main-body {
-  margin: 0 auto;
-  max-width: $max-width;
+.title-container {
+  margin-bottom: $space-size;
 }
 
 .card-container {
   display: grid;
-  gap: 20px;
+  gap: $space-size;
   box-sizing: border-box;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax($card-size, 1fr));
+  grid-auto-flow: dense;
 }
 
-.footer {
-  height: $footer-height;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.m-card {
+  grid-column: span 2;
+}
+
+.l-card {
+  grid-column: span 3;
+}
+
+$l-card-media: $card-size * 3 + 4 * $space-size;
+@media (max-width: $l-card-media) {
+  .card-container {
+    .l-card {
+      grid-column: span 2;
+    }
+  }
+}
+
+$m-card-media: $card-size * 2 + 3 * $space-size;
+@media (max-width: $m-card-media) {
+  .card-container {
+    .l-card {
+      grid-column: span 1;
+    }
+
+    .m-card {
+      grid-column: span 1;
+    }
+  }
 }
 </style>

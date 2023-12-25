@@ -22,7 +22,7 @@ export const useRegisterStore = defineStore('register', () => {
     username: '',
     password: '',
     checkPassword: '',
-    email: ''
+    nickname: ''
   })
   return {
     registerParam
@@ -38,5 +38,5 @@ interface RegisterReq {
   username: string
   password: string
   checkPassword: string
-  email: string
+  nickname: string
 }

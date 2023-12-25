@@ -2,13 +2,18 @@
 import { reactive, ref } from 'vue'
 import type { FormInst, FormRules } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { useLoginStore } from '@/stores/User'
+import { useLoginStore } from '@/stores/user'
 import { Password, User } from '@vicons/carbon'
+import { toLogin } from '@/api/alova'
+import type { Result, UserInfo } from '@/type/type'
+import { type Token, useTokenStore } from '@/stores/token'
+import { useRouter } from 'vue-router'
 
 defineEmits(['changeForm'])
 const formRef = ref<FormInst | null>(null)
 const { loginParam } = storeToRefs(useLoginStore())
-
+const { tokenParam } = storeToRefs(useTokenStore())
+const router = useRouter()
 const formRule: FormRules = reactive({
   username: [
     {
@@ -25,6 +30,18 @@ const formRule: FormRules = reactive({
     }
   ]
 })
+const handleLogin = () => {
+  let user: UserInfo = {
+    username: loginParam.value.username,
+    password: loginParam.value.password
+  }
+  toLogin(user).then((response: Result<Token>) => {
+    //将token写到pinia
+    tokenParam.value.tokenName = response.data.tokenName
+    tokenParam.value.tokenValue = response.data.tokenValue
+    router.push('/admin')
+  })
+}
 </script>
 
 <template>
@@ -52,7 +69,7 @@ const formRule: FormRules = reactive({
       </n-input>
     </n-form-item>
     <n-space vertical>
-      <n-button type="primary" class="btn"> 登录</n-button>
+      <n-button type="primary" class="btn" @click="handleLogin"> 登录</n-button>
       <n-button text class="btn" @click="$emit('changeForm')"> 没有账号？去注册</n-button>
     </n-space>
   </n-form>

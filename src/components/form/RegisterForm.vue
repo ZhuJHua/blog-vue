@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useRegisterStore } from '@/stores/User'
+import { useRegisterStore } from '@/stores/user'
 import { Password, User } from '@vicons/carbon'
 import { PasswordFilled } from '@vicons/material'
 import { reactive, ref } from 'vue'
