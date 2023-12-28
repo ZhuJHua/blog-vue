@@ -15,10 +15,17 @@ const tokenParam = useTokenStore()
 const router = useRouter()
 
 const handleExit = () => {
-  tokenParam.$reset()
-  loginParam.$reset()
   window.localStorage.removeItem('login')
+  window.$message.info('已经退出')
+  loginParam.$reset()
   window.localStorage.removeItem('token')
+  tokenParam.$reset()
+  router.push('/')
+}
+const handleAdmin = () => {
+  router.push('/admin')
+}
+const handleHome = () => {
   router.push('/')
 }
 </script>
@@ -34,6 +41,11 @@ const handleExit = () => {
       <n-layout position="absolute">
         <n-layout-header class="header" position="absolute" bordered>
           <ThemeButton />
+          <n-button-group>
+            <n-button text @click="handleHome">首页</n-button>
+            <n-divider vertical />
+            <n-button text @click="handleAdmin">后台</n-button>
+          </n-button-group>
           <ExitButton @click="handleExit" />
         </n-layout-header>
         <n-layout position="absolute" :native-scrollbar="false" class="main-container">

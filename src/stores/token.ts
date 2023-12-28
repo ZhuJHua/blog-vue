@@ -8,8 +8,14 @@ export const useTokenStore = defineStore(
       tokenName: '',
       tokenValue: ''
     })
+
+    function isLogin(): boolean {
+      return !(tokenParam.tokenValue === '' || tokenParam.tokenValue === undefined)
+    }
+
     return {
-      tokenParam
+      tokenParam,
+      isLogin
     }
   },
   {
@@ -17,7 +23,7 @@ export const useTokenStore = defineStore(
   }
 )
 
-export type Token = {
+interface Token {
   tokenName: string
   tokenValue: string
 }

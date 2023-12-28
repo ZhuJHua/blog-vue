@@ -6,13 +6,14 @@ import { storeToRefs } from 'pinia'
 import ThemeButton from '@/components/button/ThemeButton.vue'
 import { useRouter } from 'vue-router'
 import AdminButton from '@/components/button/AdminButton.vue'
-import { useTokenStore } from '@/stores/token'
 
 const { theme } = storeToRefs(useDarkStore())
-const { tokenParam } = storeToRefs(useTokenStore())
 const router = useRouter()
 const handleAdmin = () => {
   router.push('/admin')
+}
+const handleHome = () => {
+  router.push('/')
 }
 </script>
 
@@ -27,6 +28,7 @@ const handleAdmin = () => {
       <n-layout position="absolute">
         <n-layout-header class="header" position="absolute" bordered>
           <ThemeButton />
+          <n-button text @click="handleHome">首页</n-button>
           <AdminButton @click="handleAdmin" />
         </n-layout-header>
         <n-layout position="absolute" :native-scrollbar="false" class="main-container">

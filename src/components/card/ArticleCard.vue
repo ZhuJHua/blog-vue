@@ -5,28 +5,26 @@ import {
   PersonOutlineOutlined,
   RemoveRedEyeOutlined
 } from '@vicons/material'
-import type { ArticleInfo } from '@/type/type'
+import type { Article, ArticleInfo } from '@/type/type'
 
 const props = defineProps<{
-  title?: string
-  extra?: string
-  content?: string
-  footer?: string
+  article: Article
   action?: ArticleInfo
 }>()
 </script>
 
 <template>
-  <n-card :title="props.title" class="article-card">
-    <template #header-extra v-if="extra">
+  <n-card :title="props.article.title" class="article-card">
+    <template #header-extra v-if="props.article.category.categoryName">
       <n-space>
-        <n-tag :bordered="false" round type="primary">{{ props.extra }}</n-tag>
+        <n-tag :bordered="false" round type="primary"
+          >{{ props.article.category.categoryName }}
+        </n-tag>
       </n-space>
     </template>
     <n-ellipsis :line-clamp="2" :tooltip="false">
-      {{ props.content }}
+      {{ props.article.content }}
     </n-ellipsis>
-    <template #footer v-if="footer"> {{ props.footer }}</template>
     <template #action v-if="action">
       <div class="card-action">
         <div>
@@ -34,13 +32,17 @@ const props = defineProps<{
           <span>&nbsp; {{ action.author }}</span>
           <n-divider vertical />
           <n-icon :component="AccessTimeOutlined" />
-          <span>&nbsp; <n-time :time="0" :to="action.time" type="relative" /></span>
+          <span>&nbsp; <n-time :time="action.time" :to="Date.now()" type="relative" /></span>
           <n-divider vertical />
           <n-icon :component="RemoveRedEyeOutlined"></n-icon>
           <span>&nbsp;{{ action.view }}</span>
         </div>
         <div>
-          <n-button text class="article-button">
+          <n-button
+            text
+            class="article-button"
+            @click="$router.push('/article/' + props.article.id)"
+          >
             <n-icon :component="ArticleOutlined" />
           </n-button>
         </div>

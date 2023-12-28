@@ -9,13 +9,13 @@ import naive from 'naive-ui'
 
 const app = createApp(App)
 const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
 pinia.use(({ store }) => {
   const initialState = JSON.parse(JSON.stringify(store.$state))
   store.$reset = () => {
     store.$patch(initialState)
   }
 })
+pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(router)
 app.use(naive)

@@ -1,47 +1,62 @@
 <script setup lang="ts">
-import { type Ref } from 'vue'
-import { getHitokoto } from '@/api/alova'
-import type { ArticleInfo, Hitokoto } from '@/type/type'
-import TitleCard from '@/components/card/TitleCard.vue'
+import { onMounted, ref, type Ref } from 'vue'
+import { getAllArticle, getHitokoto, searchArticleByKeyWord } from '@/api/alova'
+import type { Article, Hitokoto } from '@/type/type'
 import ArticleCard from '@/components/card/ArticleCard.vue'
 
 const hitokotoData: Ref<Hitokoto> = getHitokoto
-const action: ArticleInfo = {
-  author: 'Cheese',
-  time: 86400000,
-  view: 100
+
+//获取文章数据
+const articleData = ref<Article[]>([])
+
+//关键词搜索
+const keyWord = ref<string>('')
+const searchArticle = () => {
+  if (keyWord.value === '') {
+    getAllArticle().then((response) => {
+      articleData.value = response.data
+    })
+  } else {
+    searchArticleByKeyWord(keyWord.value).then((response) => {
+      if (response.code === 200) {
+        window.$message.success('共有' + response.data.length + '篇相关文章')
+        articleData.value = response.data
+      }
+    })
+  }
 }
+const cardClass = (title: string) => {
+  if (title.length < 10) return ''
+  return title.length > 20 ? 'l-card' : 'm-card'
+}
+
+onMounted(() => {
+  getAllArticle().then((response) => {
+    articleData.value = response.data
+  })
+})
 </script>
 
 <template>
   <div class="title-container">
-    <TitleCard
-      title="这里一片荒芜"
-      content="勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，
-    奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意
-    不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？"
-      :extra="hitokotoData.hitokoto"
-    />
+    <n-card :bordered="false" title="这里一片荒芜" size="medium">
+      <template #header-extra>
+        {{ hitokotoData.hitokoto }}
+      </template>
+      <n-input-group style="width: 300px">
+        <n-input placeholder="想看什么" v-model:value="keyWord" clearable></n-input>
+        <n-button tertiary @click="searchArticle">搜索</n-button>
+      </n-input-group>
+    </n-card>
   </div>
   <div class="card-container">
     <ArticleCard
-      title="滕王阁序"
-      extra="诗词"
-      content="勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，
-    奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意
-    不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？"
-      :action="action"
+      v-for="item in articleData"
+      :key="item.id"
+      :article="item"
+      :action="{ author: item.user.username!, time: item.postTime, view: item.view }"
+      :class="cardClass(item.title)"
     />
-    <ArticleCard
-      title="头发"
-      extra="挑染"
-      content="勃，三尺微命，一介书生。无路请缨，等终军之弱冠；有怀投笔，慕宗悫之长风。舍簪笏于百龄，
-    奉晨昏于万里。非谢家之宝树，接孟氏之芳邻。他日趋庭，叨陪鲤对；今兹捧袂，喜托龙门。杨意
-    不逢，抚凌云而自惜；钟期既遇，奏流水以何惭？"
-      :action="action"
-      class="m-card"
-    />
-    <ArticleCard title="头发" extra="挑染" content="身体" :action="action" class="l-card" />
   </div>
 </template>
 

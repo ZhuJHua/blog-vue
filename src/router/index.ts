@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useTokenStore } from '@/stores/token'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,8 +66,14 @@ const router = createRouter({
 })
 //前置路由守卫
 router.beforeEach((to, from) => {
-  console.log(to.name)
-  if (window.localStorage.getItem('token') === null && to.name === 'dashboard') {
+  const token = useTokenStore()
+  const notAllow = ['dashboard', 'edit']
+  if (!token.isLogin() && notAllow.includes(<string>to.name)) {
+    if (from.name === 'login') {
+      // 如果是从登录页面跳转到 dashboard，直接返回，无需提示
+      return { name: 'login' }
+    }
+    // 如果是从其他页面跳转到 dashboard，显示提示信息
     window.$message.warning('您还未登录！')
     return { name: 'login' }
   }
