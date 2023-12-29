@@ -5,7 +5,6 @@ import { useDarkStore } from '@/stores/theme'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import type { Article, Category } from '@/type/type'
-import { useLoginStore } from '@/stores/user'
 import { addArticle, getAllCategory, updateArticle } from '@/api/alova'
 import { useRoute, useRouter } from 'vue-router'
 import { useArticleStore } from '@/stores/article'
@@ -16,7 +15,6 @@ const vditor = ref()
 const router = useRouter()
 const route = useRoute()
 const categories = ref<Category[]>([{}])
-const categoriesChoose = ref<(string | number)[] | null>(null)
 const newArticle = ref<Article>({
   view: 0,
   title: '',
@@ -74,8 +72,6 @@ const handleCategory = (value: (string | number)[]) => {
 }
 const postArticle = () => {
   newArticle.value.content = vditor.value.getValue()
-  console.log(vditor.value.getHTML().replace(/<[^>]+>/g, ''))
-  console.log(newArticle.value)
   //编辑状态
   if (route.params.id) {
     updateArticle(newArticle.value).then((response) => {

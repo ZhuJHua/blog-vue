@@ -16,6 +16,9 @@ export const alovaInstance = createAlova({
   //响应拦截器
   responded: {
     onSuccess: async (response, method) => {
+      if (response.status >= 400) {
+        await router.push('/error500')
+      }
       const json: Result<any> = await response.json()
       switch (json.code) {
         case 500:
@@ -116,7 +119,8 @@ export const { send: getAllArticle } = useRequest(
   creatGetter<Result<Article[]>>('http://localhost/article'),
   {
     initialData: {},
-    immediate: false
+    immediate: false,
+    force: true
   }
 )
 //获取单篇文章
@@ -156,7 +160,7 @@ export const { send: delCategory } = useRequest(
 //获取全部分类
 export const { send: getAllCategory } = useRequest(
   creatGetter<Result<Category[]>>('http://localhost/category'),
-  { initialData: {}, immediate: false }
+  { initialData: {}, immediate: false, force: true }
 )
 //修改分类
 export const { send: updateCategory } = useRequest(
@@ -202,9 +206,18 @@ export const { send: delSensitiveWord } = useRequest(
   }
 )
 
+//es
 //文章搜索
 export const { send: searchArticleByKeyWord } = useRequest(
   (id: string) => creatGetter<Result<Article[]>>('http://localhost/search', id),
+  {
+    initialData: {},
+    immediate: false
+  }
+)
+//强制更新索引
+export const { send: handleFlushEs } = useRequest(
+  creatGetter<Result<any>>('http://localhost/article/flush'),
   {
     initialData: {},
     immediate: false

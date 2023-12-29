@@ -18,6 +18,10 @@ const IPreviewOptions: IPreviewOptions = {
   theme: {
     current: theme.value === undefined ? 'light' : 'dark'
   },
+  hljs: {
+    style: theme.value === undefined ? 'xcode' : 'native',
+    lineNumber:true
+  },
   //渲染回调
   after() {
     useAnchorStore().$reset()
@@ -49,14 +53,9 @@ nextTick(() => {})
 </script>
 
 <template>
-  <div ref="vditor" :key="content" class="container"></div>
+  <div ref="vditor" :key="content"></div>
 </template>
 
 <style scoped lang="scss">
 @import '@/assets/css/variable';
-
-.container {
-  padding: $space-size;
-  box-sizing: border-box;
-}
 </style>

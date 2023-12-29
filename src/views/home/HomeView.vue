@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref, type Ref, watch } from 'vue'
 import { getAllArticle, getHitokoto, searchArticleByKeyWord } from '@/api/alova'
 import type { Article, Hitokoto } from '@/type/type'
 import ArticleCard from '@/components/card/ArticleCard.vue'
@@ -11,20 +11,25 @@ const articleData = ref<Article[]>([])
 
 //关键词搜索
 const keyWord = ref<string>('')
-const searchArticle = () => {
-  if (keyWord.value === '') {
-    getAllArticle().then((response) => {
-      articleData.value = response.data
-    })
-  } else {
-    searchArticleByKeyWord(keyWord.value).then((response) => {
-      if (response.code === 200) {
-        window.$message.success('共有' + response.data.length + '篇相关文章')
+const isSearch = ref<boolean>(false)
+watch(keyWord, () => {
+  setTimeout(() => {
+    if (keyWord.value === '') {
+      getAllArticle().then((response) => {
+        isSearch.value = false
         articleData.value = response.data
-      }
-    })
-  }
-}
+      })
+    } else {
+      searchArticleByKeyWord(keyWord.value).then((response) => {
+        if (response.code === 200) {
+          window.$message.success('共有' + response.data.length + '篇相关文章')
+          isSearch.value = true
+          articleData.value = response.data
+        }
+      })
+    }
+  }, 1000)
+})
 const cardClass = (title: string) => {
   if (title.length < 10) return ''
   return title.length > 20 ? 'l-card' : 'm-card'
@@ -43,10 +48,13 @@ onMounted(() => {
       <template #header-extra>
         {{ hitokotoData.hitokoto }}
       </template>
-      <n-input-group style="width: 300px">
-        <n-input placeholder="想看什么" v-model:value="keyWord" clearable></n-input>
-        <n-button tertiary @click="searchArticle">搜索</n-button>
-      </n-input-group>
+      <n-input
+        placeholder="想看什么"
+        v-model:value="keyWord"
+        clearable
+        autosize
+        style="min-width: 20%"
+      ></n-input>
     </n-card>
   </div>
   <div class="card-container">
@@ -56,6 +64,7 @@ onMounted(() => {
       :article="item"
       :action="{ author: item.user.username!, time: item.postTime, view: item.view }"
       :class="cardClass(item.title)"
+      :is-search="isSearch"
     />
   </div>
 </template>

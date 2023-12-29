@@ -10,6 +10,7 @@ import {
   getAllArticle,
   getAllCategory,
   getAllSensitiveWord,
+  handleFlushEs,
   updateCategory
 } from '@/api/alova'
 import type { Article, Category, Result, Sensitive } from '@/type/type'
@@ -27,12 +28,16 @@ const sensitiveWord = ref<string[]>([])
 
 //编辑文章，旧文章store
 const { oldArticle } = storeToRefs(useArticleStore())
-
 //新增分类
 const newCategory = ref<Category>({ categoryName: '' })
 const showAddCategory = ref<boolean>(false)
 const handleInfo = (info: string) => {
   window.$message.info(info)
+}
+const flushEs = () => {
+  handleFlushEs().then((response) => {
+    window.$message.success('刷新成功')
+  })
 }
 const handlePost = (rowData: Article) => {
   //每次点击编辑前先清空store
@@ -88,6 +93,7 @@ const handleAddCategory = () => {
       newList.data.splice(categories.value.length, 0, newCategory.value)
       return newList
     })
+    router.go(0)
   })
 }
 const openAddInput = () => {
@@ -137,7 +143,7 @@ onMounted(() => {
 <template :key="handleUpdate.value">
   <n-space vertical>
     <n-grid responsive="screen" item-responsive cols="12" :x-gap="10" :y-gap="10">
-      <n-grid-item span="12 s:3 m:4 l:6">
+      <n-grid-item span="12 s:3 m:4 l:5">
         <n-space vertical>
           <n-divider title-placement="center">概要</n-divider>
           <h3>统计</h3>
@@ -159,6 +165,7 @@ onMounted(() => {
               >新建文章
             </n-button>
             <n-button type="info" secondary strong @click="openAddInput">新建分类</n-button>
+            <n-button type="default" secondary strong @click="flushEs">更新索引</n-button>
           </n-space>
           <n-input-group v-if="showAddCategory">
             <n-input placeholder="请输入分类名" v-model:value="newCategory.categoryName" />
@@ -182,7 +189,7 @@ onMounted(() => {
           <n-dynamic-tags v-model:value="sensitiveWord" type="warning" />
         </n-space>
       </n-grid-item>
-      <n-grid-item span="12 s:9 m:8 l:6">
+      <n-grid-item span="12 s:9 m:8 l:7">
         <n-space vertical>
           <n-divider title-placement="center">做点什么</n-divider>
           <n-tabs type="segment" animated default-value="article">
@@ -217,11 +224,11 @@ onMounted(() => {
                 </x-n-data-table-column>
               </x-n-data-table>
             </n-tab-pane>
-            <n-tab-pane name="category" tab="分类" >
+            <n-tab-pane name="category" tab="分类">
               <x-n-data-table :data="categories">
                 <x-n-data-table-column key="categoryName" title="名称">
-                  <template #render-cell="{rowData}">
-                    <n-input v-model:value="rowData.categoryName"/>
+                  <template #render-cell="{ rowData }">
+                    <n-input v-model:value="rowData.categoryName" />
                   </template>
                 </x-n-data-table-column>
                 <x-n-data-table-column key="option" title="操作">

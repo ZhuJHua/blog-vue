@@ -6,11 +6,14 @@ import {
   RemoveRedEyeOutlined
 } from '@vicons/material'
 import type { Article, ArticleInfo } from '@/type/type'
+import {toRefs} from "vue";
 
 const props = defineProps<{
+  isSearch:boolean
   article: Article
   action?: ArticleInfo
 }>()
+const {isSearch}=toRefs(props)
 </script>
 
 <template>
@@ -23,7 +26,11 @@ const props = defineProps<{
       </n-space>
     </template>
     <n-ellipsis :line-clamp="2" :tooltip="false">
-      {{ props.article.content }}
+      {{
+        props.article.content
+          .replace(/(?:^|\n)(#{1,6} )|\*{1,3}|`|^-|\[.*?\]\(.*?\)|!\[.*?\]\(.*?\)/g, '')
+          .trim()
+      }}
     </n-ellipsis>
     <template #action v-if="action">
       <div class="card-action">
@@ -33,9 +40,9 @@ const props = defineProps<{
           <n-divider vertical />
           <n-icon :component="AccessTimeOutlined" />
           <span>&nbsp; <n-time :time="action.time" :to="Date.now()" type="relative" /></span>
-          <n-divider vertical />
-          <n-icon :component="RemoveRedEyeOutlined"></n-icon>
-          <span>&nbsp;{{ action.view }}</span>
+          <n-divider vertical v-if="!isSearch"/>
+          <n-icon :component="RemoveRedEyeOutlined" v-if="!isSearch"></n-icon>
+          <span v-if="!isSearch">&nbsp;{{ action.view }}</span>
         </div>
         <div>
           <n-button

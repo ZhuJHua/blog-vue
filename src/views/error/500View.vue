@@ -4,7 +4,7 @@
   <div class="container">
     <n-result status="500" title="500 服务器错误" description="服务器太便宜了" size="large">
       <template #footer>
-        <n-button @click="$router.back()">下次加钱</n-button>
+        <n-button @click="$router.push('/login')">下次加钱</n-button>
       </template>
     </n-result>
   </div>
