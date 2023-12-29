@@ -100,7 +100,7 @@ const postArticle = () => {
           <n-input placeholder="文章标题" v-model:value="newArticle.title"></n-input>
           <div id="vditor"></div>
           <n-button-group class="button-box">
-            <n-button>取消发布</n-button>
+            <n-button @click="router.push('/admin')">取消发布</n-button>
             <n-button type="primary" @click="postArticle">发布文章</n-button>
           </n-button-group>
         </n-space>
