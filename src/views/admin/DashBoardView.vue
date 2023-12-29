@@ -36,7 +36,7 @@ const handleInfo = (info: string) => {
 }
 const flushEs = () => {
   handleFlushEs().then((response) => {
-    window.$message.success('刷新成功')
+    window.$message.success(response.msg)
   })
 }
 const handlePost = (rowData: Article) => {
