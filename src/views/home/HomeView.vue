@@ -46,15 +46,15 @@ onMounted(() => {
   <div class="title-container">
     <n-card :bordered="false" title="这里一片荒芜" size="medium">
       <template #header-extra>
-        {{ hitokotoData.hitokoto }}
+        <n-input
+          placeholder="想看什么"
+          v-model:value="keyWord"
+          clearable
+          autosize
+          style="min-width: 100px;"
+        />
       </template>
-      <n-input
-        placeholder="想看什么"
-        v-model:value="keyWord"
-        clearable
-        autosize
-        style="min-width: 20%"
-      ></n-input>
+      {{ hitokotoData.hitokoto }}
     </n-card>
   </div>
   <div class="card-container">

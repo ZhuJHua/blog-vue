@@ -37,13 +37,12 @@ const handleHome = () => {
           </n-layout-content>
         </n-layout>
         <n-layout-footer class="footer" position="absolute" bordered>
-          <n-button text>
-            <template #icon>
-              <n-icon size="14px">
-                <CopyrightRegular />
-              </n-icon>
-            </template>
-            2023
+          <n-icon size="14px">
+            <CopyrightRegular />
+          </n-icon>
+          2023丨
+          <n-button text tag="a" href="https://beian.miit.gov.cn/" target="_blank">
+            赣ICP备2022010939号-3
           </n-button>
         </n-layout-footer>
       </n-layout>

@@ -17,7 +17,7 @@
     "alova": "^2.14.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.0",
-    "vditor": "^3.9.7",
+    "vditor": "^3.9.8",
     "vue": "^3.3.10",
     "vue-router": "^4.2.5"
   },

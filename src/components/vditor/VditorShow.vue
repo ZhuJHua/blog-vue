@@ -12,16 +12,20 @@ const { anchorList } = storeToRefs(useAnchorStore())
 const props = defineProps<{
   content: string
 }>()
+let CDN = 'https://cdn.jsdelivr.net/npm/vditor@3.9.8'
 const IPreviewOptions: IPreviewOptions = {
+  cdn: CDN,
   mode: theme.value === undefined ? 'light' : 'dark',
   anchor: 2,
   theme: {
-    current: theme.value === undefined ? 'light' : 'dark'
+    current: theme.value === undefined ? 'light' : 'dark',
+    path: `${CDN}/dist/css/content-theme`
   },
   hljs: {
     style: theme.value === undefined ? 'xcode' : 'native',
-    lineNumber:true
+    lineNumber: true
   },
+  emojiPath: `${CDN}/dist/images/emoji`,
   //渲染回调
   after() {
     useAnchorStore().$reset()

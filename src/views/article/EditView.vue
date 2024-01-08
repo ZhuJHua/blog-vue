@@ -36,7 +36,9 @@ onMounted(() => {
     //编辑器初始化
     content = newArticle.value.content
   }
+  let CDN = 'https://cdn.jsdelivr.net/npm/vditor@3.9.8'
   vditor.value = new Vditor('vditor', {
+    cdn: CDN,
     placeholder: '写点什么吧',
     icon: 'material',
     width: '100%',
@@ -46,8 +48,12 @@ onMounted(() => {
     theme: theme.value === undefined ? 'classic' : 'dark',
     preview: {
       theme: {
-        current: theme.value === undefined ? 'light' : 'dark'
+        current: theme.value === undefined ? 'light' : 'dark',
+        path: `${CDN}/dist/css/content-theme`
       }
+    },
+    hint: {
+      emojiPath: `${CDN}/dist/images/emoji`
     },
     counter: {
       enable: true
@@ -117,7 +123,7 @@ const postArticle = () => {
             />
             <h3>分类</h3>
             <n-card embedded :bordered="false" size="small">
-              <n-checkbox-group class="type-box" @update:value="handleCategory" max="1">
+              <n-checkbox-group class="type-box" @update:value="handleCategory" :max="Number(1)">
                 <n-checkbox
                   v-for="item in categories"
                   :key="item.id"
